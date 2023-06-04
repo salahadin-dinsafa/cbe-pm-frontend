@@ -2,6 +2,7 @@ import Search from '../components/Search';
 import TerminalList from '../components/TerminalList';
 import Pagination from '../components/Pagination';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 const Home = () => {
     return (<>
@@ -11,6 +12,7 @@ const Home = () => {
             <TerminalList />
             <Pagination />
         </div>
+        <Footer />
     </>
     )
 }
