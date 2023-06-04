@@ -7,7 +7,7 @@ import Footer from '../components/Footer';
 const Home = () => {
     return (<>
         <Navbar />
-        <div className='bg-rose-50 w-full md:w-4/6 m-auto px-10 py-7'>
+        <div className='w-full mx-auto px-10 py-7 md:w-4/6 '>
             <Search />
             <TerminalList />
             <Pagination />
