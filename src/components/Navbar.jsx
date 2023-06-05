@@ -8,14 +8,16 @@ function Navbar() {
 
     return (
         <div className='shadow-sm w-full static mb-2 flex justify-between px-10 pt-2'>
-            <div className='cursor-pointer items-center w-fit h-fit'>
+            <div className='cursor-pointer items-center w-fit h-fit rounded-full hover:bg-slate-50'>
                 <Link to='' >
                     <img className='h-14 w-14 object-scale-down rounded-full ' src={logo} alt="LogoImage" />
                 </Link>
             </div>
             <div className='w-16 flex justify-between items-center text-gold'>
-                <BsPersonCircle onClick={() => console.log('todo')} className='text-3xl cursor-pointer rounded-full p-1 hover:bg-slate-300' />
-                <BsThreeDotsVertical onClick={() => console.log('todo')} className='text-2xl cursor-pointer rounded-full p-1 hover:bg-slate-300' />
+                <Link to={`/profile/:1`}>
+                    <BsPersonCircle onClick={() => console.log('todo')} className='text-3xl cursor-pointer rounded-full p-1 hover:bg-slate-50' />
+                </Link>
+                <BsThreeDotsVertical onClick={() => console.log('todo')} className='text-2xl cursor-pointer rounded-full p-1 hover:bg-slate-50' />
             </div>
         </div >
     )
