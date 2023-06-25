@@ -1,7 +1,18 @@
+import { useSelector } from "react-redux"
 
 const Footer = () => {
+    const profile = useSelector(state => state.profile.profile);
     return (
-        <div className="border fixed bottom-0 w-full tracking-wide text-xs bg-white">
+        <div className={`
+        border 
+        fixed 
+        bottom-0
+         w-full 
+         tracking-wide 
+         text-xs 
+         bg-white
+        ${profile ? 'blur' : ''}
+        `}>
             <div className='flex flex-col text-gold pb-1 pt-3'>
                 <div className='flex flex-row text-center justify-center'>
                     <p>&copy; 2023 Comercial Bank of Ethiopia. All right reserved</p>

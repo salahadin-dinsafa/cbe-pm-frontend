@@ -1,20 +1,23 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
-import Home from './pages/Home';
-import DetailPage from './pages/DetailPage';
-import ProfilePage from './pages/ProfilePage';
-import { Error } from './pages/Error';
+import Home from './pages/homePage';
+import DetailPage from './pages/detailPage';
+import ProfilePage from './pages/profilePage';
+import ServicePage from './pages/servicePage';
+import { Error } from './pages/errorPage';
+import LoginPage from './pages/loginPage';
 
 function App() {
+  
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/details/:terminalID' element={<DetailPage />} />
-        <Route path='/profile/:userID' element={<ProfilePage />} />
-        <Route path='*' element={<Error />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path='/' element={<Home />} />
+      <Route path='/details/:terminalID' element={<DetailPage />} />
+      <Route path='/profile' element={<ProfilePage />} />
+      <Route path='/service' element={<ServicePage />} />
+      <Route path='/login' element={<LoginPage />} />
+      <Route path='*' element={<Error />} />
+    </Routes>
   );
 }
 
