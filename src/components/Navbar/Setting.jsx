@@ -19,7 +19,7 @@ const Setting = ({ handleCloseSetting }) => {
         document.addEventListener('mousedown', closeSetting)
     })
 
-    return <SettingCard navigate={navigate} settingRef={settingRef} handleCloseSetting={handleCloseSetting} />
+    return <SettingCard navigate={navigate} settingRef={settingRef} />
 }
 
 export default Setting

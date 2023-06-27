@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import { setUser, setAvatar } from '../features/profileSlice';
 import { setIsLogged } from '../features/loginSlice';
+import { addDistricts } from '../features/districtSlice';
 
 const api = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
@@ -44,6 +45,19 @@ export const getProfile = (dispatch, setLoading) => {
             dispatch(setIsLogged(false));
         })
     setLoading(false);
+}
+
+export const getDistricts = ({ setLoading, setError, dispatch }) => {
+    setLoading(true);
+    api.get('/district')
+        .then(response => {
+            setLoading(false);
+            dispatch(addDistricts(response.data));
+        }).catch((err) => {
+            setLoading(false);
+            setError(err.message);
+        })
+    setLoading(false)
 }
 
 export const login = (props) => {
@@ -99,7 +113,7 @@ export const UpdateUser = (props) => {
 }
 
 export const addPerformance = (props) => {
-    const { setError,date, performances } = props;
+    const { setError, date, performances } = props;
     api.post('/performance', {
         date,
         performances
