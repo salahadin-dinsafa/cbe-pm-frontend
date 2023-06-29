@@ -1,7 +1,7 @@
 import AsyncSelect from 'react-select/async';
 import clsx from 'clsx';
 
-const District = ({districts}) => {
+const District = ({ districts }) => {
 
     const loadOptions = (searchValue, cb) => {
         const modifiedDistricts = districts.map(district => ({
@@ -19,11 +19,11 @@ const District = ({districts}) => {
     }
 
     return (
-        <AsyncSelect className={`mb-2 md:mb-0  py-0 md:px-0 md:mr-10 w-full md:w-64`}
+        <AsyncSelect className={`mx-0 lg:mx-5 mb-2 lg:mb-0 w-full lg:w-64`}
             classNames={{
                 control: ({ isFocused }) =>
                     clsx(
-                        `mb-2 md:mb-0 md:mr-10 px-3 w- full md:w-64 rounded-lg border border-brown-700 text-gold`,
+                        `mb-2 md:mb-0 md:mr-10 px-3 w- full md:w-64 rounded-lg border border-gold text-gold`,
                         isFocused ? 'rounded-b-none' : ''
                     ),
                 menu: () =>

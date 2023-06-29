@@ -7,6 +7,7 @@ import Loader from '../../Loader.jsx';
 import { getDistricts } from '../../../app/api';
 import District from './District';
 import Search from './Search';
+import DateComponent from './DateComponent';
 
 const Select = () => {
     const districts = useSelector(state => state.district.districts);
@@ -25,14 +26,15 @@ const Select = () => {
             loading && <Loader />
         }
         {
-            error && <p className='text-red-500'>
+            error && <p className='text-red-500 text-center mt-5'>
                 {
                     error
                 }
             </p>
         }
         {
-            (!loading && !error) && <div className={`md:flex md:justify-between mt-2 `}>
+            (!loading && !error) && <div className={`lg:flex lg:justify-between mt-2 `}>
+                <DateComponent />
                 < District districts={districts} />
                 <Search />
             </div>

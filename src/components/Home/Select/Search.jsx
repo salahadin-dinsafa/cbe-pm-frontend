@@ -6,7 +6,7 @@ const Search = () => {
     }
     return (
         <form className="flex-1 flex flex-row justify-evenly">
-            <input className={`flex-1 rounded-l-lg px-2 py-0.5 border-2 border-slate-100 
+            <input className={`flex-1 rounded-l-lg px-2 py-0.5 text-gold placeholder:text-gold border border-gold 
              font-light focus:outline-none focus:border-brown-700`}
                 type="search"
                 placeholder="Search"
