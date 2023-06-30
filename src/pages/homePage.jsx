@@ -3,10 +3,10 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Select from '../components/Home/Select/Select';
-import TerminalList from '../components/Home/TerminalList';
 import Navbar from '../components/Navbar/Navbar';
 import Footer from '../components/Footer';
 import { getProfile } from '../app/api';
+import PerformanceList from '../components/Home/PerformanceList';
 
 const Home = () => {
     const login = useSelector(state => state.login.isLogged);
@@ -23,7 +23,7 @@ const Home = () => {
         <Navbar />
         <div className={`w-full md:w-5/6 lg:w-4/6 mx-auto px-10 py-1}`}>
             <Select />
-            <TerminalList />
+            <PerformanceList />
         </div>
         <Footer />
     </>

@@ -30,7 +30,7 @@ const AddPerformance = ({ role = 'MANAGER' }) => {
             if (performance['__EMPTY_2'] && performance['__EMPTY_2'].toString().startsWith('A'))
                 performances.push({
                     terminalID: performance['__EMPTY_2'],
-                    name: performance['__EMPTY_3'],
+                    name: performance['__EMPTY_5'],
                     inService: performance['__EMPTY_11'],
                     date
                 });

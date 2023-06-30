@@ -3,6 +3,7 @@ import axios from 'axios';
 import { setUser, setAvatar } from '../features/profileSlice';
 import { setIsLogged } from '../features/loginSlice';
 import { addDistricts } from '../features/districtSlice';
+import { addTerminals } from '../features/terminalSlice';
 
 const api = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
@@ -128,6 +129,27 @@ export const addPerformance = (props) => {
 
             setError(error)
         })
+}
+
+export const getPerformanceList = (props) => {
+    const {setLoading, setError, dispatch} = props;
+
+    setLoading(true);
+    api.get('/performance', {
+    }).then(response => {
+        const performances = response.data.sort((a, b) => {
+            return b.inService - a.inService
+        })
+        dispatch(addTerminals(response.data));
+        setLoading(false);
+    }).catch(err => {
+        setLoading(false)
+        let error =
+            typeof err.response.data.error === 'string'
+                ? [err.response.data.error] : err.response.data.error;
+
+        setError(error)
+    })
 }
 
 export default api;
