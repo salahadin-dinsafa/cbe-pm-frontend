@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
-import {AiFillLike, AiFillDislike} from 'react-icons/ai'
+import { AiFillLike, AiFillDislike } from 'react-icons/ai'
 
 import { getPerformanceList } from '../../app/api';
 import Pagination from './Pagination';
@@ -48,34 +48,35 @@ const PerformanceList = () => {
                 <ul>
                     {
                         terminals.map(terminal => <li key={terminal.id}>
-                                <button className={`
-                            flex justify-between 
+                            <button className={`
+                            flex justify-evenly 
                             px-3 py-2 my-3
                             text-gold tracking-wider bg-white  
                             w-full transition-shadow duration-500 hover:shadow-lg`}
-                                    onClick={clickHandler}
-                                >
-                                    <p className='mr-4'>{terminal.terminalID}</p>
-                                    <p className='mr-1'>|</p>
-                                    <p className='flex-1 flex justify-evenly'>
-                                        <span className='w-20 md:w-64 overflow-hidden'>{terminal.name}</span>
-                                        <span className=''>|</span>
-                                        <span className={`flex gap-5 ${terminal.inService > 90
-                                            ? 'text-green-700' : terminal.inService > 80
-                                                ? 'text-green-300' : terminal.inService > 70
-                                                    ? 'text-yellow-500' : terminal.inService > 50
-                                                        ? 'text-red-300' : 'text-red-700'}`}>
-                                            {terminal.inService}%
+                                onClick={clickHandler}
+                            >
+                                <p className='mr-4'>{terminal.terminalID}</p>
+                                <p className='mr-1'>|</p>
+                                <p className='flex-1 flex justify-evenly'>
+                                    <span className='flex-1'>{terminal.name}</span>
+
+                                    <span className={`flex gap-5 ${terminal.inService > 90
+                                        ? 'text-green-700' : terminal.inService > 80
+                                            ? 'text-green-300' : terminal.inService > 70
+                                                ? 'text-yellow-500' : terminal.inService > 50
+                                                    ? 'text-red-300' : 'text-red-700'}`}>
+                                        <span className='text-gold px-1'>|</span>
+                                        {terminal.inService}%
                                         {
                                             terminal.inService >= 50 && <AiFillLike className='text-2xl' />
                                         }
                                         {
                                             terminal.inService < 50 && <AiFillDislike className='text-2xl' />
                                         }
-                                        </span>
-                                    </p>
-                                </button>
-                            </li>)
+                                    </span>
+                                </p>
+                            </button>
+                        </li>)
                     }
                 </ul>
             </div>

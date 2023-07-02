@@ -14,7 +14,7 @@ const DateComponent = () => {
                 border border-gold rounded-lg
                 text-gold text-center text-xl
                 focus:outline-none focus:border-brown-700
-                p-1
+                px-1 py-2
                  `}
             />
         </div>
