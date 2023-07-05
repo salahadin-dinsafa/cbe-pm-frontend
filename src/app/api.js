@@ -131,8 +131,47 @@ export const addPerformance = (props) => {
         })
 }
 
+export const getOneTerminalPerformances = (props) => {
+    const { terminalID, setLoading, setError, setPerformances, setAverage } = props;
+    api.get(`/performance/${terminalID}`)
+        .then(response => {
+            const performances = response.data.map(performance => {
+                return {
+                    ...performance,
+                    date: `${new Date(performance.date).getUTCDate()}-${new Date(performance.date).getUTCMonth()}-${new Date(performance.date).getUTCFullYear()}`
+                }
+            })
+            setPerformances(performances)
+            let sum = 0;
+            performances.map(performance => {
+                sum += performance.inService;
+            })
+
+            setAverage([
+                {
+                    average: Math.floor(sum / performances.length),
+                    name: 'Average performance'
+                },
+                {
+                    average: Math.floor(100 - (sum / performances.length)),
+                    name: 'Left performance'
+                },
+
+            ])
+            setLoading(false);
+        })
+        .catch(err => {
+            let error =
+                typeof err.response.data.error === 'string'
+                    ? [err.response.data.error] : err.response.data.error;
+            setLoading(false);
+            setError(error)
+            console.log(err);
+        })
+}
+
 export const getPerformanceList = (props) => {
-    const {setLoading, setError, dispatch} = props;
+    const { setLoading, setError, dispatch } = props;
 
     setLoading(true);
     api.get('/performance', {

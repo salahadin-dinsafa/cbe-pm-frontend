@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from 'react';
 
+import {useNavigate} from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
 import { AiFillLike, AiFillDislike } from 'react-icons/ai'
 
@@ -15,6 +16,8 @@ const PerformanceList = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState([]);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         getPerformanceList({
             setLoading,
@@ -23,12 +26,6 @@ const PerformanceList = () => {
         });
         // eslint-disable-next-line
     }, [])
-
-
-    const clickHandler = () => {
-        // Todo: redirect to detail page
-
-    }
 
 
 
@@ -53,7 +50,7 @@ const PerformanceList = () => {
                             px-3 py-2 my-3
                             text-gold tracking-wider bg-white  
                             w-full transition-shadow duration-500 hover:shadow-lg`}
-                                onClick={clickHandler}
+                                onClick={() => navigate(`details/${terminal.terminalID}`)}
                             >
                                 <p className='mr-4'>{terminal.terminalID}</p>
                                 <p className='mr-1'>|</p>
