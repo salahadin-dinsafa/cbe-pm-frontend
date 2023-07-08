@@ -1,15 +1,25 @@
-import { MdOutlineNavigateNext, MdOutlineNavigateBefore } from 'react-icons/md';
+import PaginationItem from './PaginationItem';
+import { range } from '../../helpers/rage';
 
-const Pagination = () => {
-    const handleClick = () => {
-        console.log('todo');
-        // Todo: iterate throw page
-    }
+const Pagination = ({ currentPage, total, limit, onPageChange }) => {
+    const pagesCount = Math.ceil(total / limit);
+    const pages = range(1, pagesCount);
+
+
     return (
-        <div className="bg-white text-gold px-2 w-48 mx-auto flex justify-between items-center">
-            <MdOutlineNavigateBefore onClick={handleClick} className="text-2xl hover:bg-slate-50 hover:cursor-pointer rounded-full" />
-            <p className="text-xl p-1">- {1} -</p>
-            <MdOutlineNavigateNext onClick={handleClick} className="text-2xl font-light hover:bg-slate-50 hover:cursor-pointer rounded-full" />
+        <div className="bg-white border px-2 pt-2 flex justify-center">
+            <ul className='flex text-gold text-2xl overflow-x-scroll pb-3'>
+                {
+                    pages.map(page => (
+                        <PaginationItem
+                            key={page}
+                            page={page}
+                            currentPage={currentPage}
+                            onPageChange={onPageChange}
+                        />))
+                }
+            </ul>
+
         </div>
     )
 }

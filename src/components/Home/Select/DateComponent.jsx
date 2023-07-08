@@ -1,15 +1,18 @@
-import { useState } from 'react';
 import DatePicker from 'react-datepicker';
+import { useDispatch, useSelector } from 'react-redux';
 
 import "react-datepicker/dist/react-datepicker.css";
+import { setDate } from '../../../features/terminalSlice';
 
 const DateComponent = () => {
-    const [startDate, setStartDate] = useState(new Date())
+    const date = useSelector(state => state.terminal.date);
+    const dispatch = useDispatch();
+
     return (
         <div className='mb-2 lg:mb-0'>
             <DatePicker
-                selected={startDate}
-                onChange={date => setStartDate(date)}
+                selected={!date ? new Date() : date}
+                onChange={date => dispatch(setDate(date))}
                 className={`
                 border border-gold rounded-lg
                 text-gold text-center text-xl

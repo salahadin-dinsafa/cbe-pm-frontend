@@ -31,7 +31,6 @@ const DetailPage = () => {
             setLoading
         }
         getOneTerminalPerformances(props);
-        console.log('average', average);
         // eslint-disable-next-line
     }, [loading])
     return (

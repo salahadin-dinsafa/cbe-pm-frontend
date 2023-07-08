@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment';
 
 import { setUser, setAvatar } from '../features/profileSlice';
 import { setIsLogged } from '../features/loginSlice';
@@ -138,7 +139,7 @@ export const getOneTerminalPerformances = (props) => {
             const performances = response.data.map(performance => {
                 return {
                     ...performance,
-                    date: `${new Date(performance.date).getUTCDate()}-${new Date(performance.date).getUTCMonth()}-${new Date(performance.date).getUTCFullYear()}`
+                    date: `${new Date(performance.date).getUTCDate()}-${new Date(performance.date).getUTCMonth() + 1}-${new Date(performance.date).getUTCFullYear()}`
                 }
             })
             setPerformances(performances)
@@ -171,14 +172,26 @@ export const getOneTerminalPerformances = (props) => {
 }
 
 export const getPerformanceList = (props) => {
-    const { setLoading, setError, dispatch } = props;
+    const { setLoading, setError, dispatch, date, district, searchValue } = props;
+
+    const newDate = moment(date).utcOffset(0, true);
+    newDate.hours(0)
+    newDate.minutes(0)
+    newDate.seconds(0);
+    newDate.milliseconds(0);
 
     setLoading(true);
-    api.get('/performance', {
+    api.get(`/performance?district=${district}&${date ? `date=${newDate.toISOString()}` : ''}`, {
     }).then(response => {
-        const performances = response.data.sort((a, b) => {
+        response.data.sort((a, b) => {
             return b.inService - a.inService
         })
+        if (response.data.length > 0 && searchValue) {
+            response.data = response.data.filter(performance => {
+                if (performance.terminalID.includes(searchValue) || performance.name.includes(searchValue))
+                    return performance;
+            })
+        }
         dispatch(addTerminals(response.data));
         setLoading(false);
     }).catch(err => {

@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,7 +19,7 @@ const Home = () => {
         if (!login)
             getProfile(dispatch, () => { })
         // eslint-disable-next-line
-    }, [login])
+    }, [])
 
     return (<>
         <Navbar />

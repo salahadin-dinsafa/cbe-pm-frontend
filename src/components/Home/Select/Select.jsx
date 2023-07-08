@@ -19,7 +19,7 @@ const Select = () => {
     useEffect(() => {
         getDistricts({ setLoading, setError, dispatch });
         // eslint-disable-next-line
-    }, [districts])
+    }, [])
 
     return (<div>
         {

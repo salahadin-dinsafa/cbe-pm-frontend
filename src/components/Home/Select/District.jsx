@@ -1,7 +1,11 @@
 import AsyncSelect from 'react-select/async';
 import clsx from 'clsx';
+import { useDispatch } from 'react-redux';
+
+import { setDistrict } from '../../../features/terminalSlice';
 
 const District = ({ districts }) => {
+    const dispatch = useDispatch();
 
     const loadOptions = (searchValue, cb) => {
         const modifiedDistricts = districts.map(district => ({
@@ -15,7 +19,7 @@ const District = ({ districts }) => {
     }
 
     const handleSelectChanger = selectedOption => {
-        console.log(selectedOption);
+        dispatch(setDistrict(selectedOption.value));
     }
 
     return (
@@ -35,8 +39,8 @@ const District = ({ districts }) => {
             unstyled
             loadOptions={loadOptions}
             defaultOptions={[{
-                value: 'Dire Dawa',
-                label: 'Dire Dawa'
+                value: 'DIRE DAWA',
+                label: 'DIRE DAWA'
             }]}
             onChange={handleSelectChanger}
         />
