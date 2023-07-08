@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import Navbar from '../components/Navbar/Navbar'
+import Footer from '../components/Footer';
 import Loader from '../components/Loader';
 import { login } from '../app/api'
 
@@ -50,38 +51,18 @@ const LoginPage = () => {
 
 
     return (
-        <div className={`
-            w-full
-            h-full
-            absolute
-            top-0
-            z-50          
-        `}>
+        <div className={`w-full h-full absolute top-0 z-50`}>
             <Navbar />
-            {!loading && <div className={`
-               bg-slate-100
-               h-80
-               lg:w-3/6
-               mx-auto lg:mt-32 pt-2
-               flex flex-col
-               text-center text-gold text-lg tracking-wide
-               rounded-xl
-            `}>
+            {!loading && <div className={`bg-slate-100 h-fit w-fit mx-auto mt-32 pt-2
+               flex flex-col text-center text-gold text-lg tracking-wider rounded-xl`}>
                 <IoIosCloseCircleOutline
                     onClick={() => navigate(state.back)}
-                    className={`
-                    p-1 ml-auto
-                    text-5xl 
-                    w-fit 
-                    flex  
-                    hover:bg-white 
-                    rounded-full 
-                    transition duration-500 
-                    cursor-pointer `} />
+                    className={`p-1 ml-auto mb-7 text-5xl w-fit flex hover:bg-white 
+                    rounded-full transition duration-500 cursor-pointer`} />
                 <form className={`flex-1 flex flex-col justify-evenly`}
                     onSubmit={onSubmitHandler}>
-                    <div className={`flex justify-evenly md:w-4/5 mx-auto mb-2 px-1`}>
-                        <label className=" my-auto text-sm md:text-lg" htmlFor="phonenumber">
+                    <div className={`flex mb-10 px-5`}>
+                        <label className="text-2xl my-auto" htmlFor="phonenumber">
                             Phone Number:
                         </label>
                         <input
@@ -96,8 +77,8 @@ const LoginPage = () => {
                             required
                         />
                     </div>
-                    <div className={`flex justify-between md:w-4/5 mx-auto mb-2 px-1`}>
-                        <label htmlFor="password">Password:</label>
+                    <div className={`flex mb-8 px-5`}>
+                        <label className="text-2xl my-auto" htmlFor="password">Password:</label>
                         <input
                             className={inputCssClass}
                             onChange={passwordHandler}
@@ -108,21 +89,10 @@ const LoginPage = () => {
                             minLength={8}
                         />
                     </div>
-                    <button className={`
-                    w-full
-                  bg-brown-700
-                  text-white
-                    text-xl tracking-wide
-                    rounded
-                    transition
-                    duration-500
-                    border
-                    border-white
-                    hover:text-brown-700
-                    hover:bg-white
-                    hover:border-brown-100`}
-                        type="submit"
-                    >
+                    <button className={`w-full bg-brown-700 text-white text-2xl py-2 tracking-wider
+                    rounded transition duration-500 border border-white hover:text-brown-700
+                    hover:bg-white hover:border-brown-100`}
+                        type="submit">
                         Login
                     </button>
                 </form>
@@ -135,18 +105,12 @@ const LoginPage = () => {
                 }
             </div>
             }
-            {loading && <div className={`
-               h-80
-               lg:w-3/6
-               mx-auto
-               mt-20 lg:mt-48
-               flex flex-col
-               text-center text-gold text-lg tracking-wide
-               rounded-xl
-            `}>
+            {loading && <div className={`h-80 lg:w-3/6 mx-auto mt-20 lg:mt-48 flex flex-col
+               text-center text-gold text-lg tracking-wide rounded-xl`}>
                 <Loader className='pt-10' />
             </div>
             }
+            <Footer />
         </div>
     )
 }
