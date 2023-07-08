@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 import { useDispatch } from 'react-redux';
@@ -12,6 +12,7 @@ import Loader from '../components/Loader';
 import { login } from '../app/api'
 
 const LoginPage = () => {
+    const [logged, setLogged] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState([]);
@@ -25,7 +26,6 @@ const LoginPage = () => {
     const inputCssClass = `flex-1 rounded ml-5 px-2 pb-1 border border-gold focus:border-brown-100
     focus:outline-none`;
 
-
     const onSubmitHandler = (e) => {
         // Todo: validate both phone and password
         e.preventDefault();
@@ -37,7 +37,8 @@ const LoginPage = () => {
             loginUser,
             dispatch,
             setLoading,
-            setError
+            setError,
+            setLogged
         });
     }
 
@@ -48,6 +49,11 @@ const LoginPage = () => {
         setPassword(e.target.value)
 
     }
+
+    useEffect(() => {
+        if (logged)
+            navigate('/', { replace: false });
+    }, [logged])
 
 
     return (

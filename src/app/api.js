@@ -63,19 +63,15 @@ export const getDistricts = ({ setLoading, setError, dispatch }) => {
 }
 
 export const login = (props) => {
-    const {
-        loginUser,
-        dispatch,
-        setLoading,
-        setError
-    } = props;
+    const { loginUser, dispatch, setLoading, setError, setLogged } = props;
+
     setLoading(true);
     api.post('/auth/login', {
         ...loginUser
     }).then(response => {
-        console.log(response);
         localStorage.setItem('token', response.data);
         getProfile(dispatch, setLoading)
+        setLogged(true);
     }).catch(err => {
         dispatch(setIsLogged(false));
         let error =
