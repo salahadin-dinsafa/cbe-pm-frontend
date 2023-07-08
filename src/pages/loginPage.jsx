@@ -28,7 +28,6 @@ const LoginPage = () => {
 
     const onSubmitHandler = (e) => {
         // Todo: validate both phone and password
-        e.preventDefault();
         const loginUser = {
             phoneNumber,
             password
@@ -52,7 +51,7 @@ const LoginPage = () => {
 
     useEffect(() => {
         if (logged)
-            navigate('/', { replace: false });
+            navigate('/', { replace: true });
     }, [logged])
 
 

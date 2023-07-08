@@ -9,6 +9,7 @@ import Loader from '../components/Loader';
 
 import { setIsBlured } from '../features/profileSlice';
 import { getProfile } from '../app/api';
+import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
   const [displayUpdateProfile, setDisplayUpdateProfile] = useState(false);
@@ -19,17 +20,18 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleUpdateClick = () => {
     setDisplayUpdateProfile(!displayUpdateProfile);
     dispatch(setIsBlured(!profileState));
   }
 
-
+  console.log('Logged', login)
 
   useEffect(() => {
     if (!login)
-      getProfile(dispatch, setLoading)
+      navigate('/login', { replace: true })
     // eslint-disable-next-line
   }, [login])
 
@@ -96,7 +98,8 @@ const ProfilePage = () => {
           onClick={handleUpdateClick}
         >Update Profile</button>
       </div>
-    </div>}
+    </div>
+    }
     {
       displayUpdateProfile && <UpdateProfile handleUpdateClick={handleUpdateClick} />
     }
