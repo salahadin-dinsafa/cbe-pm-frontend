@@ -17,7 +17,7 @@ function Navbar() {
     }
 
     return (<>
-        <div className={`z-50 shadow-sm w-full static flex justify-between px-7 md:px-10 pt-2
+        <div className={`shadow-sm w-full static flex justify-between px-7 md:px-10 py-2
         ${profile ? 'blur' : ''}`}>
             <Logo />
             <Menu handleCloseSetting={handleCloseSetting} />

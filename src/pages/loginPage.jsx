@@ -12,11 +12,11 @@ import Loader from '../components/Loader';
 import { login } from '../app/api'
 
 const LoginPage = () => {
-    const [logged, setLogged] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -27,7 +27,7 @@ const LoginPage = () => {
     focus:outline-none`;
 
     const onSubmitHandler = (e) => {
-        // Todo: validate both phone and password
+        e.preventDefault();
         const loginUser = {
             phoneNumber,
             password
@@ -37,7 +37,7 @@ const LoginPage = () => {
             dispatch,
             setLoading,
             setError,
-            setLogged
+            setIsSuccess
         });
     }
 
@@ -50,9 +50,9 @@ const LoginPage = () => {
     }
 
     useEffect(() => {
-        if (logged)
-            navigate('/', { replace: true });
-    }, [logged])
+        if (isSuccess)
+            navigate('/', { replace: true })
+    }, [isSuccess])
 
 
     return (

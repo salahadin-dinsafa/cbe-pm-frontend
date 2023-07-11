@@ -1,26 +1,29 @@
 import { Link } from 'react-router-dom';
 
-const SettingCard = ({ navigate, settingRef }) => {
-    const Menu = [
-        "Add User",
-        "Add Performance"
-    ]
+const SettingCard = ({ navigate, settingRef, user }) => {
+
+    const itemClass = `cursor-pointer hover:bg-slate-50 my-2`
 
     return (
-        <div ref={settingRef} className={`bg-white w-fit py-2 mr-3 absolute right-0 shadow-md rounded-b-lg text-gold`} >
+        <div ref={settingRef} className={`z-50 bg-white w-fit p-2 mr-3 absolute right-0 
+        shadow-md rounded-b-lg text-gold text-xl tracking-wider border`} >
             <ul>
-                {Menu.map((item, index) => <Link to={`/service`} key={index}>
-                    <li className={`cursor-pointer hover:bg-slate-50 px-2`}>
-                        {item}
+                <li className={itemClass}
+                    onClick={() => navigate('/add_user', { state: { role: user.role } })}
+                >
+                    Add User
+                </li>
+                <Link to="/add_performance">
+                    <li className={`${itemClass} mb-0`}>
+                        Add Performance
                     </li>
-                </Link>)
-                }
+                </Link>
                 <hr />
-                <li onClick={() => navigate('/login', { state: { back: '/' } })} className={`cursor-pointer hover:bg-slate-50 px-2 mt-1`}>
+                <li onClick={() => navigate('/login', { state: { back: '/' } })} className={`${itemClass} text-end`}>
                     Login
                 </li>
             </ul>
-        </div>
+        </div >
     )
 }
 

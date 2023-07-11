@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
@@ -9,38 +9,58 @@ import { addPerformance } from '../app/api';
 const AddPerformance = ({ role = 'MANAGER' }) => {
     const [file, setFile] = useState([]);
     const [error, setError] = useState([]);
+    const [isSuccess, setIsSuccess] = useState(false);
 
     const navigate = useNavigate();
 
 
-    const inputCssClass = `border border-brown-700 h-32 rounded-xl cursor-pointer tracking-wide
-    file:block file:mx-auto file:py-5 file:bg-brown-700 file:text-white file:w-full file:cursor-pointer`;
+    const inputCssClass = `border border-brown-100 text-xl h-32 rounded-xl cursor-pointer tracking-wider mb-3
+    file:block file:mx-auto file:py-5 file:bg-brown-700 file:text-white file:w-full 
+    file:tracking-wider file:hover:bg-brown-100 file:hover:text-brown-700 
+    file:border-none  file:cursor-pointer`;
 
     const submitHandler = (e) => {
         e.preventDefault();
-        let date = file[0]['Terminal Performance Report']
-            .toString()
-            .slice(28)
-        date = `${date} AM UTC`
-        date = (new Date(date)).toISOString()
-        
+        let date = file[0]['Terminal Performance Report'];
 
-        let performances = [];
-        file.map(performance => {
-            if (performance['__EMPTY_2'] && performance['__EMPTY_2'].toString().startsWith('A'))
-                performances.push({
-                    terminalID: performance['__EMPTY_2'],
-                    name: performance['__EMPTY_5'],
-                    inService: performance['__EMPTY_11'],
-                    date
-                });
-        });
-        const props = {
-            setError,
-            date,
-            performances
+        if (date) {
+
+            date = date.toString().slice(28)
+            date = `${date} AM UTC`
+            date = (new Date(date)).toISOString()
+
+            let performances = [];
+            let average = [];
+            file.map((performance, index) => {
+
+                if (performance['__EMPTY_2'] && performance['__EMPTY_2'].toString().startsWith('A')) {
+                    performances.push({
+                        terminalID: performance['__EMPTY_2'],
+                        name: performance['__EMPTY_5'],
+                        inService: performance['__EMPTY_11'],
+                        date
+                    });
+                }
+                // Cheak only each district performance 
+                // possible to add region
+                if (performance['__EMPTY_2'] === 'Mean' && file[index-1]['__EMPTY_2'].startsWith('A')) {
+                    average.push({
+                        terminalID: file[index - 1]['__EMPTY_2'],
+                        inService: performance['__EMPTY_11']
+                    })
+                }
+            });
+            const props = {
+                setError,
+                date,
+                performances,
+                average,
+                setIsSuccess
+            }
+            addPerformance(props);
+        } else {
+            setError(["Invalid Excel File"])
         }
-        addPerformance(props);
     }
 
     const handleFileChange = async (e) => {
@@ -61,53 +81,37 @@ const AddPerformance = ({ role = 'MANAGER' }) => {
         }
     }
 
-    return (
-        <div className={`
-         h-96 md:w-4/6
-         mx-auto mt-20 
-         px-2 py-3
-         rounded-lg       
-        `}>
-            <div className={`
-               bg-slate-100
-               h-fit
-               lg:w-4/6
-               mx-auto
-               mt-15 pt-2
-               flex flex-col
-               text-center text-gold text-lg
-                    tracking-wide
-            `}>
-                <IoIosCloseCircleOutline className={`
-                p-1 ml-auto
-                text-5xl 
-                w-fit flex  
-                hover:bg-white 
-                rounded-full 
-                transition duration-500 cursor-pointer `}
-                    onClick={() => navigate('/', { replace: true })}
-                />
-                <form onSubmit={submitHandler}>
-                    <div className={`
-                    md:w-3/5
-                    mx-auto mb-2 px-1
-                `}>
-                        <input
-                            className={inputCssClass}
-                            type="file"
-                            name="performance"
-                            id="performance"
-                            onChange={handleFileChange}
-                            accept='.xls, .xlsx'
-                            required
-                        />
-                    </div>
+    useEffect(() => {
+        if (isSuccess)
+            navigate('/', { replace: true })
+    }, [isSuccess])
 
-                    <button className={`
+    return (
+        <div className={`bg-slate-100 h-fit w-fit mx-auto mt-24 rounded-lg
+               flex flex-col text-center text-gold text-lg tracking-wider`}>
+            <IoIosCloseCircleOutline className={`p-1 mb-5 ml-auto text-5xl w-fit flex  
+                hover:bg-white rounded-full transition duration-500 cursor-pointer `}
+                onClick={() => navigate('/', { replace: true })}
+            />
+            <form onSubmit={submitHandler}>
+                <div className={`mb-2 px-10`}>
+                    <input
+                        className={inputCssClass}
+                        type="file"
+                        name="performance"
+                        id="performance"
+                        onChange={handleFileChange}
+                        accept='.xls, .xlsx'
+                        required
+                    />
+                </div>
+
+                <button className={`
                     w-full
+                    py-2
                 bg-brown-700
                 text-white
-                text-xl tracking-wide
+                text-xl tracking-wider
                 rounded
                 transition
                 duration-500
@@ -118,15 +122,14 @@ const AddPerformance = ({ role = 'MANAGER' }) => {
                 hover:border-brown-100
                 `} type="submit">Add Performance</button>
 
-                </form>
-                {
-                    (error.length > 0) && <ul className='text-red-500'>
-                        {error.map((err, index) => <li key={index}>
-                            {err}
-                        </li>)}
-                    </ul>
-                }
-            </div>
+            </form>
+            {
+                (error.length > 0) && <ul className='text-red-500'>
+                    {error.map((err, index) => <li key={index}>
+                        {err}
+                    </li>)}
+                </ul>
+            }
         </div>
     )
 }

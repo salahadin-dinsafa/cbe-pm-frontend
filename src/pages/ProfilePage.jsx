@@ -5,10 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import UpdateProfile from '../components/UpadateProfile';
 import Navbar from '../components/Navbar/Navbar';
 import Footer from '../components/Footer';
-import Loader from '../components/Loader';
 
 import { setIsBlured } from '../features/profileSlice';
-import { getProfile } from '../app/api';
 import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
@@ -17,7 +15,6 @@ const ProfilePage = () => {
   const login = useSelector(state => state.login.isLogged);
   const user = useSelector(state => state.profile.user);
   const avatar = useSelector(state => state.profile.avatar);
-  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -26,8 +23,6 @@ const ProfilePage = () => {
     setDisplayUpdateProfile(!displayUpdateProfile);
     dispatch(setIsBlured(!profileState));
   }
-
-  console.log('Logged', login)
 
   useEffect(() => {
     if (!login)
@@ -38,43 +33,15 @@ const ProfilePage = () => {
 
   return (<>
     <Navbar />
-    {
-      loading && <Loader />
-    }
-    {login && <div className={`
-        bg-slate-50
-         h-96 md:w-4/6
-         mx-auto mt-20 
-         px-2 py-3
-         rounded-lg 
-         ${profileState ? 'blur' : ''}
-         `}>
-      <div className={`
-            bg-white
-              w-fit h-fit
-              flex 
-              mx-auto
-              rounded-full
-              p-1
-            `}>
-        <img className={`
-                w-24
-                h-24
-                object-cover
-                object-top
-                rounded-full
-              `}
+    {login && <div className={`bg-slate-50 h-96 md:w-4/6 mx-auto mt-20 px-2 py-3
+         rounded-lg ${profileState ? 'blur' : ''}`}>
+      <div className={`bg-white w-fit h-fit flex mx-auto rounded-full p-1`}>
+        <img className={`w-24 h-24 object-cover object-top rounded-full`}
           src={avatar}
           alt="avatar" />
       </div>
-      <div className={`
-        w-fit 
-        h-52
-        mx-auto
-        text-gold
-        text-center
-        flex flex-col justify-evenly
-      `}>
+      <div className={`w-fit h-52 mx-auto text-gold text-center
+        flex flex-col justify-evenly`}>
         <h1 className='text-4xl'>{user.firstName} {user.lastName}</h1>
         <h3 className='text-3xl'>{user.district}</h3>
         <h5 className='text-2xl'>{user.role}</h5>

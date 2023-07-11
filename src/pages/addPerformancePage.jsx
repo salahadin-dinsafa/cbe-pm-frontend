@@ -1,18 +1,13 @@
 import Navbar from "../components/Navbar/Navbar";
 import Footer from '../components/Footer'
-import AddUser from '../components/AddUser';
 import AddPerformance from "../components/AddPerformance";
 
-const ServicePage = () => {
+const AddPerformancePage = () => {
     return (<div>
         <Navbar />
-        {
-            // <AddUser />
-            <AddPerformance />
-        }
+        <AddPerformance />
         <Footer />
-
     </div>)
 }
 
-export default ServicePage;
+export default AddPerformancePage;

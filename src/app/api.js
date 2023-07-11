@@ -14,7 +14,7 @@ const api = axios.create({
     }
 })
 
-const getImage = (dispatch) => {
+export const getImage = (dispatch) => {
     api.get('/users/image', {
         responseType: 'blob'
     })
@@ -22,7 +22,7 @@ const getImage = (dispatch) => {
             const newBlob = new Blob([response.data], { type: response.data.type })
             const objectUrl = URL.createObjectURL(newBlob);
             dispatch(setAvatar(objectUrl))
-        })
+        }).catch(_err => { })
 }
 
 export const getProfile = (dispatch, setLoading) => {
@@ -41,7 +41,6 @@ export const getProfile = (dispatch, setLoading) => {
                         ? response.data.managerDistrict.name : null,
                 role: response.data.role
             }))
-            getImage(dispatch);
         }).catch(_err => {
             setLoading(false);
             dispatch(setIsLogged(false));
@@ -55,6 +54,7 @@ export const getDistricts = ({ setLoading, setError, dispatch }) => {
         .then(response => {
             setLoading(false);
             dispatch(addDistricts(response.data));
+            setError('')
         }).catch((err) => {
             setLoading(false);
             setError(err.message);
@@ -63,15 +63,17 @@ export const getDistricts = ({ setLoading, setError, dispatch }) => {
 }
 
 export const login = (props) => {
-    const { loginUser, dispatch, setLoading, setError, setLogged } = props;
+    const { loginUser, dispatch, setLoading, setError, setIsSuccess } = props;
 
     setLoading(true);
     api.post('/auth/login', {
         ...loginUser
     }).then(response => {
+        setIsSuccess(true)
+        dispatch(setIsLogged(true))
         localStorage.setItem('token', response.data);
-        getProfile(dispatch, setLoading)
-        setLogged(true);
+        setLoading(false);
+        setError([])
     }).catch(err => {
         dispatch(setIsLogged(false));
         let error =
@@ -89,7 +91,6 @@ export const UpdateUser = (props) => {
     api.patch('/users/profile', {
         ...updateUser
     }).then(response => {
-        console.log(response);
         dispatch(setUser({
             firstName: response.data.firstName,
             lastName: response.data.lastName,
@@ -100,6 +101,7 @@ export const UpdateUser = (props) => {
             role: response.data.role
         }))
         handleUpdateClick();
+        setError([])
         navigatar(`/profile`)
     }).catch(err => {
         let error =
@@ -111,21 +113,70 @@ export const UpdateUser = (props) => {
 }
 
 export const addPerformance = (props) => {
-    const { setError, date, performances } = props;
+    const { setError, date, performances, setIsSuccess, average } = props;
     api.post('/performance', {
         date,
+        average,
         performances
+    }).then(_response => {
+        setIsSuccess(true);
+        setError([])
+    }).catch(err => {
+        let error =
+            typeof err.response.data.error === 'string'
+                ? [err.response.data.error] : err.response.data.error;
+        setError(error)
     })
-        .then(response => {
-            console.log(response);
-        })
-        .catch(err => {
+}
+
+export const addUser = (props) => {
+    const { firstName, lastName, phoneNumber, selectedRole, role,
+        setLoading, setError, setIsSuccess, district } = props;
+    setLoading(true);
+    setIsSuccess(false);
+    if (role === 'ADMIN') {
+        api.post('/admin/addmg',
+            {
+                firstName,
+                lastName,
+                phoneNumber,
+                district
+            }
+        ).then(_response => {
+            setLoading(false);
+            setIsSuccess(true);
+            setError([])
+        }).catch(err => {
+            setLoading(false)
+            setIsSuccess(false);
             let error =
                 typeof err.response.data.error === 'string'
                     ? [err.response.data.error] : err.response.data.error;
 
             setError(error)
         })
+    } else {
+        api.post('/mg/addStaff',
+            {
+                firstName,
+                lastName,
+                phoneNumber,
+                role: selectedRole
+            }
+        ).then(_response => {
+            setLoading(false);
+            setIsSuccess(true);
+            setError([])
+        }).catch(err => {
+            setLoading(false)
+            setIsSuccess(false);
+            let error =
+                typeof err.response.data.error === 'string'
+                    ? [err.response.data.error] : err.response.data.error;
+
+            setError(error)
+        })
+    }
 }
 
 export const getOneTerminalPerformances = (props) => {
@@ -156,6 +207,7 @@ export const getOneTerminalPerformances = (props) => {
 
             ])
             setLoading(false);
+            setError([])
         })
         .catch(err => {
             let error =
@@ -190,6 +242,7 @@ export const getPerformanceList = (props) => {
         }
         dispatch(addTerminals(response.data));
         setLoading(false);
+        setError([])
     }).catch(err => {
         setLoading(false)
         let error =
