@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 
 import { addUser } from '../app/api';
 import Loader from './Loader';
+import Button from './Button';
 
 const AddUser = ({ role }) => {
   const [firstName, setFirstName] = useState('');
@@ -16,7 +17,6 @@ const AddUser = ({ role }) => {
   const [loading, setLoading] = useState(false);
   const isLogged = useSelector(state => state.login.isLogged);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [district, setDistrict] = useState('')
 
 
   const navigate = useNavigate();
@@ -32,35 +32,38 @@ const AddUser = ({ role }) => {
     'OPERATOR'
   ]
 
-  const Admin = [
-    '',
-    'DISTRICT_IS_MG'
-  ]
-
-
   const inputCssClass = `flex-1 rounded ml-5 pr-2 pb-1 border border-gold focus:border-brown-100
     focus:outline-none`;
 
-  const handleFirstNameChange = (e) => {
-    setFirstName(e.target.value)
-  }
-
-  const handleLastNameChange = (e) => {
-    setLastName(e.target.value)
-
-  }
-
-  const handlePhoneNumberChange = (e) => {
-    setPhoneNumber(e.target.value)
-
-  }
   const handleSelectedRoleChange = (e) => {
     setSelectedRole(e.target.value)
 
   }
-  const handleDistrictChange = (e) => {
-    setDistrict(e.target.value);
-  }
+
+
+  const inputObject = [
+    {
+      type: 'text',
+      name: 'firstname',
+      minLength: 3,
+      label: 'Firstname:',
+      onChange: (e) => setFirstName(e.target.value),
+    },
+    {
+      type: 'text',
+      name: 'lastname',
+      label: 'Lastname:',
+      minLength: 3,
+      onChange: (e) => setLastName(e.target.value),
+    },
+    {
+      type: 'tel',
+      name: 'phonenumber',
+      label: 'Phone number:',
+      minLength: 9,
+      onChange: (e) => setPhoneNumber(e.target.value),
+    },
+  ]
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -69,7 +72,6 @@ const AddUser = ({ role }) => {
       lastName,
       phoneNumber,
       selectedRole,
-      role,
       setLoading,
       setError,
       setIsSuccess
@@ -98,83 +100,42 @@ const AddUser = ({ role }) => {
           onClick={() => navigate('/')}
         />
         <form onSubmit={submitHandler}>
-          <div className={`flex justify-between mx-3 mb-5 px-1`}>
-            <label htmlFor="firstname">Firstname:</label>
-            <input
-              className={inputCssClass}
-              type="text"
-              name="firstname"
-              id="firstname"
-              minLength={2}
-              onChange={handleFirstNameChange}
-            />
-          </div>
-          <div className={`flex justify-between mx-3 mb-5 px-1`}>
-            <label htmlFor="lastname">Lastname:</label>
-            <input
-              className={inputCssClass}
-              type="text"
-              name="lastname"
-              id="lastname"
-              minLength={2}
-              onChange={handleLastNameChange}
-            />
-          </div>
-          <div className={`flex justify-between mx-3 mb-5 px-1`}>
-            <label className='text-lg md:text-2xl' htmlFor="phonenumber">Phone number:</label>
-            <input
-              className={inputCssClass}
-              type="tel"
-              name="phonenumber"
-              id="phonenumber"
-              onChange={handlePhoneNumberChange}
-            />
-          </div>
           {
-            role === 'ADMIN' && <div className={`flex justify-between mx-3 mb-5 px-1`}>
-              <label htmlFor="role">District:</label>
-              <select value={district} onChange={handleDistrictChange} className={inputCssClass}>
-                <option value='DIRE DAWA'>DIRE DAWA</option>
-                <option value='JIJIGA'>JIJIGA</option>
-                <option value='HAWASA'>HAWASA</option>
-                <option value='GONDER'>GONDER</option>
-              </select>
-            </div>
-          }{role !== 'ADMIN' &&
-            <div className={`flex justify-between mx-3 mb-5 px-1`}>
-              <label htmlFor="role">Role:</label>
-              <select value={selectedRole} onChange={handleSelectedRoleChange} className={inputCssClass}>
-                {
-                  role === 'ADMIN' &&
-                  Admin.map(staff => <option key={staff} value={staff}>{staff} </option>)
-                }
-                {
-                  role === 'DISTRICT_IS_MG' &&
-                  Manager.map(staff => <option key={staff} value={staff}>{staff} </option>)
-                }
-                {
-                  role === 'IS' &&
-                  IS.map(staff => <option key={staff} value={staff}>{staff} </option>)
-                }
-              </select>
-            </div>
+            inputObject.map((element, index) => <div key={index} className={`flex justify-between mx-3 mb-5 px-1`}>
+              <label className={`${element.name === 'phonenumber' ? 'text-lg md:text-2xl' : ''}`} htmlFor={element.label}>{element.label}</label>
+              <input
+                className={inputCssClass}
+                type={element.type}
+                name={element.name}
+                id={element.name}
+                minLength={element.minLength}
+                onChange={element.onChange}
+                required
+              />
+            </div>)
           }
-          <button className={`
-                    w-full
-                    py-2
-                bg-brown-700
-                text-white
-                text-2xl
-                transition
-                duration-500
-                border
-                border-white
-                hover:text-brown-700
-                hover:bg-white
-                hover:border-brown-100
-                `} type="submit">Add User</button>
+          <div className={`flex justify-between mx-3 mb-5 px-1`}>
+            <label htmlFor="role">Role:</label>
+            <select
+              className={inputCssClass}
+              name='role'
+              id='role'
+              value={selectedRole}
+              onChange={handleSelectedRoleChange}
+              required>
+              {
+                role === 'DISTRICT_IS_MG' &&
+                Manager.map(staff => <option key={staff} value={staff}>{staff} </option>)
+              }
+              {
+                role === 'IS' &&
+                IS.map(staff => <option key={staff} value={staff}>{staff} </option>)
+              }
+            </select>
+          </div>
+          <Button name='Add User' />
 
-        </form>
+        </form >
         {
           (error.length > 0) && <ul className='text-red-500'>
             {error.map((err, index) => <li key={index}>

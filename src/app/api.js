@@ -113,19 +113,22 @@ export const UpdateUser = (props) => {
 }
 
 export const addPerformance = (props) => {
-    const { setError, date, performances, setIsSuccess, average } = props;
+    const { setError, date, performances, setIsSuccess, average, setLoading } = props;
+    setLoading(true);
     api.post('/performance', {
         date,
         average,
         performances
     }).then(_response => {
         setIsSuccess(true);
-        setError([])
+        setError([]);
+        setLoading(false);
     }).catch(err => {
         let error =
             typeof err.response.data.error === 'string'
                 ? [err.response.data.error] : err.response.data.error;
         setError(error)
+        setLoading(false);
     })
 }
 

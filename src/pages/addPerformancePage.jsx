@@ -1,13 +1,13 @@
 import Navbar from "../components/Navbar/Navbar";
 import Footer from '../components/Footer'
-import AddPerformance from "../components/AddPerformance";
+import AddPerformance from "../components/Performance/AddPerformance";
 
 const AddPerformancePage = () => {
-    return (<div>
+    return (<>
         <Navbar />
         <AddPerformance />
         <Footer />
-    </div>)
+    </>)
 }
 
 export default AddPerformancePage;

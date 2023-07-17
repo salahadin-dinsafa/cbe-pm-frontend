@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import UpdateProfile from '../components/UpadateProfile';
 import Navbar from '../components/Navbar/Navbar';
 import Footer from '../components/Footer';
+import Button from '../components/Button';
 
 import { setIsBlured } from '../features/profileSlice';
 import { useNavigate } from 'react-router-dom';
@@ -47,24 +48,7 @@ const ProfilePage = () => {
         <h5 className='text-2xl'>{user.role}</h5>
         <h6 className='text-xl'>{user.phoneNumber}</h6>
       </div>
-      <div className="text-end md:w-4/6 mx-auto">
-        <button className={`
-          bg-brown-700
-          text-white text-md tracking-wide
-          px-5 py-3
-          rounded-lg
-          cursor-pointer
-          transition
-          duration-500
-          border
-          border-white
-          hover:text-brown-700
-          hover:bg-white
-          hover:border-brown-100
-        `}
-          onClick={handleUpdateClick}
-        >Update Profile</button>
-      </div>
+      <Button name="Update profile" />
     </div>
     }
     {

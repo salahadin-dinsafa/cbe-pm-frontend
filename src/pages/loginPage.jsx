@@ -9,6 +9,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar/Navbar'
 import Footer from '../components/Footer';
 import Loader from '../components/Loader';
+import Button from '../components/Button'
 import { login } from '../app/api'
 
 const LoginPage = () => {
@@ -41,13 +42,28 @@ const LoginPage = () => {
         });
     }
 
-    const phoneNumberHandler = (e) => {
-        setPhoneNumber(e.target.value)
-    }
-    const passwordHandler = (e) => {
-        setPassword(e.target.value)
-
-    }
+    const inputElements = [
+        {
+            onChange: (e) => setPhoneNumber(e.target.value),
+            value: phoneNumber,
+            type: "tel",
+            name: "phonenumber",
+            id: "phonenumber",
+            label: "Phone number:",
+            minLength: 9,
+            maxLength: 14
+        },
+        {
+            onChange: (e) => setPassword(e.target.value),
+            value: password,
+            type: "password",
+            name: "password",
+            id: "password",
+            label: "Password",
+            minLength: 8,
+            maxLength: null
+        }
+    ]
 
     useEffect(() => {
         if (isSuccess)
@@ -66,40 +82,28 @@ const LoginPage = () => {
                     rounded-full transition duration-500 cursor-pointer`} />
                 <form className={`flex-1 flex flex-col justify-evenly`}
                     onSubmit={onSubmitHandler}>
-                    <div className={`flex mb-10 px-5`}>
-                        <label className="text-2xl my-auto" htmlFor="phonenumber">
-                            Phone Number:
-                        </label>
-                        <input
-                            className={inputCssClass}
-                            onChange={phoneNumberHandler}
-                            value={phoneNumber}
-                            type="tel"
-                            name="phonenumber"
-                            id="phonenumber"
-                            minLength={9}
-                            maxLength={14}
-                            required
-                        />
-                    </div>
-                    <div className={`flex mb-8 px-5`}>
-                        <label className="text-2xl my-auto" htmlFor="password">Password:</label>
-                        <input
-                            className={inputCssClass}
-                            onChange={passwordHandler}
-                            value={password}
-                            type="password"
-                            name="password"
-                            id="password"
-                            minLength={8}
-                        />
-                    </div>
-                    <button className={`w-full bg-brown-700 text-white text-2xl py-2 tracking-wider
-                    rounded transition duration-500 border border-white hover:text-brown-700
-                    hover:bg-white hover:border-brown-100`}
-                        type="submit">
-                        Login
-                    </button>
+                    {
+                        inputElements.map(element =>
+
+                            <div className={`flex mb-10 px-5`}>
+                                <label className="text-2xl my-auto" htmlFor={`${element.name}`}>
+                                    {element.label}
+                                </label>
+                                <input
+                                    className={inputCssClass}
+                                    onChange={element.onChange}
+                                    value={element.value}
+                                    type={element.type}
+                                    name={element.name}
+                                    id={element.id}
+                                    minLength={element.minLength}
+                                    maxLength={element.maxLength}
+                                    required
+                                />
+                            </div>
+                        )
+                    }
+                    <Button name='Login' />
                 </form>
                 {
                     (error.length > 0) && <ul className='text-red-500'>

@@ -1,18 +1,11 @@
-import { useEffect, useState } from 'react';
-
 import { IoIosCloseCircleOutline } from 'react-icons/io';
-import { useNavigate } from 'react-router-dom';
 import * as xlsx from 'xlsx';
-import { addPerformance } from '../app/api';
 
+import { addPerformance } from '../../app/api';
+import Loader from '../Loader';
+import Button from '../Button';
 
-const AddPerformance = ({ role = 'MANAGER' }) => {
-    const [file, setFile] = useState([]);
-    const [error, setError] = useState([]);
-    const [isSuccess, setIsSuccess] = useState(false);
-
-    const navigate = useNavigate();
-
+const AddPerformanceCard = ({ navigate, error, setError, file, setFile, setIsSuccess, loading, setLoading }) => {
 
     const inputCssClass = `border border-brown-100 text-xl h-32 rounded-xl cursor-pointer tracking-wider mb-3
     file:block file:mx-auto file:py-5 file:bg-brown-700 file:text-white file:w-full 
@@ -22,9 +15,7 @@ const AddPerformance = ({ role = 'MANAGER' }) => {
     const submitHandler = (e) => {
         e.preventDefault();
         let date = file[0]['Terminal Performance Report'];
-
         if (date) {
-
             date = date.toString().slice(28)
             date = `${date} AM UTC`
             date = (new Date(date)).toISOString()
@@ -43,7 +34,7 @@ const AddPerformance = ({ role = 'MANAGER' }) => {
                 }
                 // Cheak only each district performance 
                 // possible to add region
-                if (performance['__EMPTY_2'] === 'Mean' && file[index-1]['__EMPTY_2'].startsWith('A')) {
+                if (performance['__EMPTY_2'] === 'Mean' && file[index - 1]['__EMPTY_2'].startsWith('A')) {
                     average.push({
                         terminalID: file[index - 1]['__EMPTY_2'],
                         inService: performance['__EMPTY_11']
@@ -55,7 +46,8 @@ const AddPerformance = ({ role = 'MANAGER' }) => {
                 date,
                 performances,
                 average,
-                setIsSuccess
+                setIsSuccess,
+                setLoading
             }
             addPerformance(props);
         } else {
@@ -65,32 +57,39 @@ const AddPerformance = ({ role = 'MANAGER' }) => {
 
     const handleFileChange = async (e) => {
         const file = e.target.files[0];
-        try {
-            if (e.target.files[0].size > 1200000) {
-                throw new Error('size of file extendes')
-            }
-            else {
-                const data = await file.arrayBuffer(file);
-                const excelfile = xlsx.read(data);
-                const excelsheet = excelfile.Sheets[excelfile.SheetNames[0]]
-                const exceljson = xlsx.utils.sheet_to_json(excelsheet);
-                setFile(exceljson)
-            }
-        } catch (error) {
-            console.log(error);
+
+        if (e.target.files[0].size > 1200000) {
+            throw new Error('size of file extendes')
         }
+        else {
+            const data = await file.arrayBuffer(file);
+            const excelfile = xlsx.read(data);
+            const excelsheet = excelfile.Sheets[excelfile.SheetNames[0]]
+            const exceljson = xlsx.utils.sheet_to_json(excelsheet);
+            setFile(exceljson)
+        }
+
     }
 
-    useEffect(() => {
-        if (isSuccess)
-            navigate('/', { replace: true })
-    }, [isSuccess])
+    return (<>
+        {loading && <Loader />}
 
-    return (
-        <div className={`bg-slate-100 h-fit w-fit mx-auto mt-24 rounded-lg
-               flex flex-col text-center text-gold text-lg tracking-wider`}>
-            <IoIosCloseCircleOutline className={`p-1 mb-5 ml-auto text-5xl w-fit flex  
-                hover:bg-white rounded-full transition duration-500 cursor-pointer `}
+        {!loading && <div className={`
+        bg-slate-100 
+          h-fit w-fit 
+          mx-auto mt-24 
+          rounded-lg
+          flex flex-col
+          text-center text-gold text-lg tracking-wider`
+        }>
+            <IoIosCloseCircleOutline className={`
+            p-1 mb-5 ml-auto 
+            text-5xl 
+            w-fit flex  
+          hover:bg-white 
+            rounded-full 
+            transition duration-500 
+            cursor-pointer `}
                 onClick={() => navigate('/', { replace: true })}
             />
             <form onSubmit={submitHandler}>
@@ -105,23 +104,7 @@ const AddPerformance = ({ role = 'MANAGER' }) => {
                         required
                     />
                 </div>
-
-                <button className={`
-                    w-full
-                    py-2
-                bg-brown-700
-                text-white
-                text-xl tracking-wider
-                rounded
-                transition
-                duration-500
-                border
-                border-white
-                hover:text-brown-700
-                hover:bg-white
-                hover:border-brown-100
-                `} type="submit">Add Performance</button>
-
+                <Button name='Add Performance' />
             </form>
             {
                 (error.length > 0) && <ul className='text-red-500'>
@@ -131,7 +114,9 @@ const AddPerformance = ({ role = 'MANAGER' }) => {
                 </ul>
             }
         </div>
+        }
+    </>
     )
 }
 
-export default AddPerformance
+export default AddPerformanceCard
